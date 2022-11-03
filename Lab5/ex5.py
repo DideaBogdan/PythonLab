@@ -2,7 +2,6 @@ def my_function(lst):
     res =[]
     for items in lst:
         if type(items) == int or type(items) == float or type(items) == complex:
-            print(type(items))
             res.append(items)
     return res
 

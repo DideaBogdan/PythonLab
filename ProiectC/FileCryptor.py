@@ -4,15 +4,20 @@ import hashlib
 
 
 def validate_argv():
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 4:  #eroare argumente prea multe/ putine
         raise Exception("Error: You should call the script like this: python FileCryptor.py crypt/decrypt \'path\\to\\file\' password")
-    if sys.argv[1] == 'crypt' and os.path.splitext(sys.argv[2])[1] == '.encrypted':
+    if sys.argv[1] == 'crypt' and os.path.splitext(sys.argv[2])[1] == '.encrypted':  #eroare pentru încercare de criptare pe fisier deja criptat
         raise Exception("Error: File is already encrypted!")
-    if sys.argv[1] == 'decrypt' and os.path.splitext(sys.argv[2])[1] != '.encrypted':
+    if sys.argv[1] == 'decrypt' and os.path.splitext(sys.argv[2])[1] != '.encrypted':  #eroare pentru încercare de decriptare pe fisier care nu este criptat
         raise Exception("Error: This file is not encrypted!")
 
 
 def hashMD5(fl):
+    """
+
+    :param fl: primeste fișierul pe care se face hash md5
+    :return: functia hash a fișierului
+    """
     m = hashlib.md5()
     with open(fl, "rb") as f:
         while True:
@@ -24,6 +29,12 @@ def hashMD5(fl):
 
 
 def encrypt():
+    """
+    Cand se criptează se generează hash-ul fișierului, apoi se citește din fisier caracter cu caracter,
+    pentru fiecare se aduna codul ASCII cu cel al caracterului din iteratia curenta a parolei
+    Apoi se pune hash-ul pe 32 de caractere si sirul criptat in noul fisier creat ".encrypted".
+
+    """
     hsh = hashMD5(sys.argv[2])
     password = sys.argv[3]
     enc = str()
@@ -43,6 +54,13 @@ def encrypt():
 
 
 def decrypt():
+    """
+    Se ia fișierul criptat din care se citește si se fac operatii pe fiecare caracter similar cu functia de criptare,
+    doar ca se scad valorile ASCII. Primii 32 de octeti sunt citiți odata, deoarece reprezinta hash-ul fișierului
+    decriptat. Dupa ce se decriptează, se creaza hash pe sirul decriptat si se compara cu cel al fișierului initial.
+    Daca hash-urile nu se potrivesc înseamna ca parola a fost greșita si se anulează operatia de decriptare. Altfel
+    se va crea fișierul decriptat.
+    """
     password = sys.argv[3]
     dec = str()
     ind_pass = 0

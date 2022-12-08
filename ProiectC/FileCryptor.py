@@ -11,6 +11,7 @@ def validate_argv():
     if os.path.isfile(sys.argv[2]) is False:
         raise Exception(f"Error: The {sys.argv[2]} is not a file!")
 
+
 def hashSHA256(fl):
     """
 
@@ -50,7 +51,6 @@ def crypt(encrypt):
             verify_pass = f.read(64)
             if verify_pass != hshpass:
                 raise Exception("Password was wrong! File couldn't be decrypted!Retry...")
-            hsh = f.read(64)
         already_encrypted = f.read(6)
         if encrypt is True and already_encrypted == 'Bogdan':
             raise Exception("Error: File is already encrypted!")
@@ -77,7 +77,6 @@ def crypt(encrypt):
     else:
         with open(sys.argv[2], "w", encoding='utf-8') as f:
             f.write(enc)
-
 
 
 if __name__ == '__main__':
